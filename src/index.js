@@ -302,7 +302,7 @@ function listBits (bits) {
 function allowed (board, pos) {
   let bits = 511
 
-  for (let axis = 0; axis < 3; axi1s++) {
+  for (let axis = 0; axis < 3; axis++) {
     const x = axisFor(pos, axis)
     bits = bits & axisMissing(board, x, axis)
   }
