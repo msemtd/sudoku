@@ -20,10 +20,15 @@
     "type": "git",
     "url": "git://github.com/dachev/sudoku.git"
   },
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "eslint": "^9.26.0",
+    "neostandard": "^0.12.1"
+  },
   "esnext": "dist-src/index.js",
   "main": "dist-node/index.js",
   "module": "dist-web/index.js",
-  "types": "dist-types/index.d.ts"
+  "types": "dist-types/index.d.ts",
+  "volta": {
+    "node": "22.15.0"
+  }
 }
