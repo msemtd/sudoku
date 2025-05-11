@@ -2,10 +2,6 @@
   "name": "sudoku",
   "description": "Sudoku generator and solver for node.js and Web",
   "version": "0.0.3",
-  "files": [
-    "dist-*/"
-  ],
-  "pika": true,
   "sideEffects": false,
   "keywords": [
     "sudoku",
@@ -15,20 +11,25 @@
     "game",
     "board"
   ],
+  "private": true,
   "homepage": "https://github.com/dachev/sudoku",
   "repository": {
     "type": "git",
     "url": "git://github.com/dachev/sudoku.git"
   },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+   },
+  "volta": {
+    "node": "22.15.0"
+  },
   "dependencies": {
     "eslint": "^9.26.0",
     "neostandard": "^0.12.1"
   },
-  "esnext": "dist-src/index.js",
-  "main": "dist-node/index.js",
-  "module": "dist-web/index.js",
-  "types": "dist-types/index.d.ts",
-  "volta": {
-    "node": "22.15.0"
+  "devDependencies": {
+    "webpack": "^5.99.8",
+    "webpack-cli": "^6.0.1"
   }
 }
