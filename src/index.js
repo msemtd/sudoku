@@ -3,7 +3,7 @@
 //
 // This is a port of David Bau's python  implementation:
 // http://davidbau.com/archives/2006/09/04/sudoku_generator.html
-function makepuzzle (board) {
+function makePuzzle (board) {
   const puzzle = []
   const deduced = Array(81).fill(null)
   const order = [...Array(81).keys()]
@@ -27,21 +27,21 @@ function makepuzzle (board) {
   for (let i = puzzle.length - 1; i >= 0; i--) {
     const e = puzzle[i]
     removeElement(puzzle, i)
-    const rating = checkpuzzle(boardforentries(puzzle), board)
+    const rating = checkPuzzle(boardForEntries(puzzle), board)
 
     if (rating === -1) {
       puzzle.push(e)
     }
   }
 
-  return boardforentries(puzzle)
+  return boardForEntries(puzzle)
 }
 
-function ratepuzzle (puzzle, samples) {
+function ratePuzzle (puzzle, samples) {
   let total = 0
 
   for (let i = 0; i < samples; i++) {
-    const tuple = solveboard(puzzle)
+    const tuple = solveBoard(puzzle)
 
     if (tuple.answer === null) {
       return -1
@@ -53,23 +53,23 @@ function ratepuzzle (puzzle, samples) {
   return total / samples
 }
 
-function checkpuzzle (puzzle, board) {
+function checkPuzzle (puzzle, board) {
   if (board === undefined) {
     board = null
   }
 
-  const tuple1 = solveboard(puzzle)
+  const tuple1 = solveBoard(puzzle)
 
   if (tuple1.answer === null) {
     return -1
   }
 
-  if (board != null && !boardmatches(board, tuple1.answer)) {
+  if (board != null && !boardMatches(board, tuple1.answer)) {
     return -1
   }
 
   const difficulty = tuple1.state.length
-  const tuple2 = solvenext(tuple1.state)
+  const tuple2 = solveNext(tuple1.state)
 
   if (tuple2.answer != null) {
     return -1
@@ -78,11 +78,11 @@ function checkpuzzle (puzzle, board) {
   return difficulty
 }
 
-function solvepuzzle (board) {
-  return solveboard(board).answer
+function solvePuzzle (board) {
+  return solveBoard(board).answer
 }
 
-function solveboard (original) {
+function solveBoard (original) {
   const board = [].concat(original)
   const guesses = deduce(board)
 
@@ -98,10 +98,10 @@ function solveboard (original) {
     count: 0,
     board
   }]
-  return solvenext(track)
+  return solveNext(track)
 }
 
-function solvenext (remembered) {
+function solveNext (remembered) {
   while (remembered.length > 0) {
     const tuple1 = remembered.pop()
 
@@ -145,13 +145,13 @@ function deduce (board) {
     let guess = null
     let count = 0 // fill in any spots determined by direct conflicts
 
-    const tuple1 = figurebits(board)
+    const tuple1 = figureBits(board)
     let allowed = tuple1.allowed
     let needed = tuple1.needed
 
     for (let pos = 0; pos < 81; pos++) {
       if (board[pos] === null) {
-        const numbers = listbits(allowed[pos])
+        const numbers = listBits(allowed[pos])
 
         if (numbers.length === 0) {
           return []
@@ -165,7 +165,7 @@ function deduce (board) {
               num: val
             }
           })
-          const tuple2 = pickbetter(guess, count, t)
+          const tuple2 = pickBetter(guess, count, t)
           guess = tuple2.guess
           count = tuple2.count
         }
@@ -173,14 +173,14 @@ function deduce (board) {
     }
 
     if (!stuck) {
-      const tuple3 = figurebits(board)
+      const tuple3 = figureBits(board)
       allowed = tuple3.allowed
       needed = tuple3.needed
     } // fill in any spots determined by elimination of other locations
 
     for (let axis = 0; axis < 3; axis++) {
       for (let x = 0; x < 9; x++) {
-        const numbers = listbits(needed[axis * 9 + x])
+        const numbers = listBits(needed[axis * 9 + x])
 
         for (let i = 0; i < numbers.length; i++) {
           const n = numbers[i]
@@ -188,7 +188,7 @@ function deduce (board) {
           const spots = []
 
           for (let y = 0; y < 9; y++) {
-            const pos = posfor(x, y, axis)
+            const pos = posFor(x, y, axis)
 
             if (allowed[pos] & bit) {
               spots.push(pos)
@@ -207,7 +207,7 @@ function deduce (board) {
                 num: n
               }
             })
-            const tuple4 = pickbetter(guess, count, t)
+            const tuple4 = pickBetter(guess, count, t)
             guess = tuple4.guess
             count = tuple4.count
           }
@@ -225,7 +225,7 @@ function deduce (board) {
   }
 }
 
-function figurebits (board) {
+function figureBits (board) {
   const needed = []
   const allowed = board.map(function (val, key) {
     return val === null ? 511 : 0
@@ -233,11 +233,11 @@ function figurebits (board) {
 
   for (let axis = 0; axis < 3; axis++) {
     for (let x = 0; x < 9; x++) {
-      const bits = axismissing(board, x, axis)
+      const bits = axisMissing(board, x, axis)
       needed.push(bits)
 
       for (let y = 0; y < 9; y++) {
-        const pos = posfor(x, y, axis)
+        const pos = posFor(x, y, axis)
         allowed[pos] = allowed[pos] & bits
       }
     }
@@ -249,7 +249,7 @@ function figurebits (board) {
   }
 }
 
-function posfor (x, y, axis) {
+function posFor (x, y, axis) {
   if (axis === undefined) {
     axis = 0
   }
@@ -263,7 +263,7 @@ function posfor (x, y, axis) {
   return [0, 3, 6, 27, 30, 33, 54, 57, 60][x] + [0, 1, 2, 9, 10, 11, 18, 19, 20][y]
 }
 
-function axisfor (pos, axis) {
+function axisFor (pos, axis) {
   if (axis === 0) {
     return Math.floor(pos / 9)
   } else if (axis === 1) {
@@ -273,11 +273,11 @@ function axisfor (pos, axis) {
   return Math.floor(pos / 27) * 3 + Math.floor(pos / 3) % 3
 }
 
-function axismissing (board, x, axis) {
+function axisMissing (board, x, axis) {
   let bits = 0
 
   for (let y = 0; y < 9; y++) {
-    const e = board[posfor(x, y, axis)]
+    const e = board[posFor(x, y, axis)]
 
     if (e != null) {
       bits |= 1 << e
@@ -287,7 +287,7 @@ function axismissing (board, x, axis) {
   return 511 ^ bits
 }
 
-function listbits (bits) {
+function listBits (bits) {
   const list = []
 
   for (let y = 0; y < 9; y++) {
@@ -302,15 +302,15 @@ function listbits (bits) {
 function allowed (board, pos) {
   let bits = 511
 
-  for (let axis = 0; axis < 3; axis++) {
-    const x = axisfor(pos, axis)
-    bits = bits & axismissing(board, x, axis)
+  for (let axis = 0; axis < 3; axi1s++) {
+    const x = axisFor(pos, axis)
+    bits = bits & axisMissing(board, x, axis)
   }
 
   return bits
 } // TODO: make sure callers utilize the return value correctly
 
-function pickbetter (b, c, t) {
+function pickBetter (b, c, t) {
   if (b === null || t.length < b.length) {
     return {
       guess: t,
@@ -334,7 +334,7 @@ function pickbetter (b, c, t) {
   }
 }
 
-function boardforentries (entries) {
+function boardForEntries (entries) {
   const board = Array(81).fill(null)
 
   for (let i = 0; i < entries.length; i++) {
@@ -347,7 +347,7 @@ function boardforentries (entries) {
   return board
 }
 
-function boardmatches (b1, b2) {
+function boardMatches (b1, b2) {
   for (let i = 0; i < 81; i++) {
     if (b1[i] !== b2[i]) {
       return false
@@ -379,10 +379,10 @@ function removeElement (array, from, to) {
 
 ;
 module.exports = {
-  makepuzzle: function () {
-    return makepuzzle(solvepuzzle(Array(81).fill(null)))
+  makePuzzle: function () {
+    return makePuzzle(solvePuzzle(Array(81).fill(null)))
   },
-  solvepuzzle,
-  ratepuzzle,
-  posfor
+  solvePuzzle,
+  ratePuzzle,
+  posFor
 }
